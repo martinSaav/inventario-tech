@@ -21,8 +21,9 @@ def show_products():
 
 def update_product():
     product_id = int(input("Enter the product ID to update: "))
-    new_quantity = int(input("Enter the new quantity: "))
-    if Inventory.update_product(product_id, new_quantity):
+    attribute = input("Enter the attribute to update: ")
+    new_value = input("Enter the new value: ")
+    if Inventory.update_product(product_id, attribute, new_value):
         print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)

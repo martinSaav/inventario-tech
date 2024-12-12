@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class Inventory:
     @staticmethod
     def connect_db():
@@ -43,14 +44,14 @@ class Inventory:
         return products
 
     @staticmethod
-    def update_product(product_id, new_quantity):
+    def update_product(product_id, attribute, new_value):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('''
+        cursor.execute(f'''
             UPDATE products
-            SET quantity = ?
+            SET {attribute} = ?
             WHERE id = ?
-        ''', (new_quantity, product_id))
+        ''', (new_value, product_id))
         changes = cursor.rowcount
         connection.commit()
         connection.close()
@@ -69,7 +70,6 @@ class Inventory:
         connection.close()
         return changes > 0
 
-
     @staticmethod
     def find_product(product_id):
         connection = Inventory.connect_db()
@@ -79,7 +79,6 @@ class Inventory:
         connection.close()
         return product
 
-
     @staticmethod
     def products_low_stock(limit):
         connection = Inventory.connect_db()
@@ -88,4 +87,3 @@ class Inventory:
         products = cursor.fetchall()
         connection.close()
         return products
-
