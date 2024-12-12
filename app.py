@@ -2,91 +2,87 @@ from colorama import Fore, Style
 from inventory import Inventory
 
 
-def registrar_producto():
-    nombre = input("Ingrese el nombre del producto: ")
-    descripcion = input("Ingrese la descripcion del producto: ")
-    cantidad = int(input("Ingrese la cantidad disponible: "))
-    precio = float(input("Ingrese el precio del producto: "))
-    categoria = input("Ingrese la categoria del producto: ")
-    Inventory.add_product(nombre, descripcion, cantidad, precio, categoria)
-    print(Fore.GREEN + "\nProducto registrado exitosamente!" + Style.RESET_ALL)
+def add_product():
+    name = input("Enter product name: ")
+    description = input("Enter product description: ")
+    quantity = int(input("Enter available quantity: "))
+    price = float(input("Enter product price: "))
+    category = input("Enter product category: ")
+    Inventory.add_product(name, description, quantity, price, category)
+    print(Fore.GREEN + "\nProduct successfully added!" + Style.RESET_ALL)
 
 
-def mostrar_productos():
-    productos = Inventory.get_products()
-    print(Fore.BLUE + "\nProductos en el inventario:" + Style.RESET_ALL)
-    for producto in productos:
-        print(
-            f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
+def show_products():
+    products = Inventory.get_products()
+    print(Fore.BLUE + "\nInventory Products:" + Style.RESET_ALL)
+    for product in products:
+        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
 
-def actualizar_producto():
-    id_producto = int(input("Ingrese el ID del producto a actualizar: "))
-    nueva_cantidad = int(input("Ingrese la nueva cantidad: "))
-    if Inventory.update_product(id_producto, nueva_cantidad):
-        print(Fore.GREEN + "\nProducto actualizado exitosamente!" + Style.RESET_ALL)
+def update_product():
+    product_id = int(input("Enter the product ID to update: "))
+    new_quantity = int(input("Enter the new quantity: "))
+    if Inventory.update_product(product_id, new_quantity):
+        print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
     else:
-        print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
+        print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
 
 
-def eliminar_producto():
-    id_producto = int(input("Ingrese el ID del producto a eliminar: "))
-    if Inventory.delete_product(id_producto):
-        print(Fore.GREEN + "\nProducto eliminado exitosamente!" + Style.RESET_ALL)
+def delete_product():
+    product_id = int(input("Enter the product ID to delete: "))
+    if Inventory.delete_product(product_id):
+        print(Fore.GREEN + "\nProduct successfully deleted!" + Style.RESET_ALL)
     else:
-        print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
+        print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
 
 
-def buscar_producto():
-    id_producto = int(input("Ingrese el ID del producto a buscar: "))
-    producto = Inventory.find_product(id_producto)
-    if producto:
-        print(
-            Fore.BLUE + f"\nProducto encontrado: ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}" + Style.RESET_ALL)
+def find_product():
+    product_id = int(input("Enter the product ID to find: "))
+    product = Inventory.find_product(product_id)
+    if product:
+        print(Fore.BLUE + f"\nProduct found: ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}" + Style.RESET_ALL)
     else:
-        print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
+        print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
 
 
-def reporte_bajo_stock():
-    limite = int(input("Ingrese el límite de bajo stock: "))
-    productos = Inventory.products_low_stock(limite)
-    print(Fore.YELLOW + "\nProductos con bajo stock:" + Style.RESET_ALL)
-    for producto in productos:
-        print(
-            f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
-
+def low_stock_report():
+    limit = int(input("Enter the low stock limit: "))
+    products = Inventory.products_low_stock(limit)
+    print(Fore.YELLOW + "\nProducts with low stock:" + Style.RESET_ALL)
+    for product in products:
+        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
 def menu_principal():
     Inventory.initialize_db()
     while True:
-        print(Fore.CYAN + "\n--- Menú Principal ---" + Style.RESET_ALL)
-        print("1. Registrar producto")
-        print("2. Mostrar productos")
-        print("3. Actualizar producto")
-        print("4. Eliminar producto")
-        print("5. Buscar producto")
-        print("6. Generar reporte de bajo stock")
-        print("7. Salir")
+        print(Fore.CYAN + "\n--- Main Menu ---" + Style.RESET_ALL)
+        print("1. Add product")
+        print("2. Show products")
+        print("3. Update product")
+        print("4. Delete product")
+        print("5. Find product")
+        print("6. Generate low stock report")
+        print("7. Exit")
 
-        opcion = input("Seleccione una opción: ")
+        option = input("Select an option: ")
 
-        if opcion == '1':
-            registrar_producto()
-        elif opcion == '2':
-            mostrar_productos()
-        elif opcion == '3':
-            actualizar_producto()
-        elif opcion == '4':
-            eliminar_producto()
-        elif opcion == '5':
-            buscar_producto()
-        elif opcion == '6':
-            reporte_bajo_stock()
-        elif opcion == '7':
-            print(Fore.GREEN + "\nGracias por usar la aplicación. Adiós!" + Style.RESET_ALL)
+        if option == '1':
+            add_product()
+        elif option == '2':
+            show_products()
+        elif option == '3':
+            update_product()
+        elif option == '4':
+            delete_product()
+        elif option == '5':
+            find_product()
+        elif option == '6':
+            low_stock_report()
+        elif option == '7':
+            print(Fore.GREEN + "\nThank you for using the application. Goodbye!" + Style.RESET_ALL)
             break
         else:
-            print(Fore.RED + "\nOpción no válida. Intente nuevamente." + Style.RESET_ALL)
+            print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
 
 
 if __name__ == '__main__':
