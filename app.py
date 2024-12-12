@@ -1,5 +1,6 @@
 from colorama import Fore, Style
-from inventario import Inventario
+from inventory import Inventory
+
 
 def registrar_producto():
     nombre = input("Ingrese el nombre del producto: ")
@@ -7,47 +8,56 @@ def registrar_producto():
     cantidad = int(input("Ingrese la cantidad disponible: "))
     precio = float(input("Ingrese el precio del producto: "))
     categoria = input("Ingrese la categoria del producto: ")
-    Inventario.registrar_producto(nombre, descripcion, cantidad, precio, categoria)
+    Inventory.add_product(nombre, descripcion, cantidad, precio, categoria)
     print(Fore.GREEN + "\nProducto registrado exitosamente!" + Style.RESET_ALL)
 
+
 def mostrar_productos():
-    productos = Inventario.obtener_productos()
-    print(Fore.BLUE + "\nProductos en inventario:" + Style.RESET_ALL)
+    productos = Inventory.get_products()
+    print(Fore.BLUE + "\nProductos en el inventario:" + Style.RESET_ALL)
     for producto in productos:
-        print(f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
+        print(
+            f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
+
 
 def actualizar_producto():
     id_producto = int(input("Ingrese el ID del producto a actualizar: "))
     nueva_cantidad = int(input("Ingrese la nueva cantidad: "))
-    if Inventario.actualizar_producto(id_producto, nueva_cantidad):
+    if Inventory.update_product(id_producto, nueva_cantidad):
         print(Fore.GREEN + "\nProducto actualizado exitosamente!" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
 
+
 def eliminar_producto():
     id_producto = int(input("Ingrese el ID del producto a eliminar: "))
-    if Inventario.eliminar_producto(id_producto):
+    if Inventory.delete_product(id_producto):
         print(Fore.GREEN + "\nProducto eliminado exitosamente!" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
 
+
 def buscar_producto():
     id_producto = int(input("Ingrese el ID del producto a buscar: "))
-    producto = Inventario.buscar_producto(id_producto)
+    producto = Inventory.find_product(id_producto)
     if producto:
-        print(Fore.BLUE + f"\nProducto encontrado: ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}" + Style.RESET_ALL)
+        print(
+            Fore.BLUE + f"\nProducto encontrado: ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}" + Style.RESET_ALL)
     else:
         print(Fore.RED + "\nProducto no encontrado!" + Style.RESET_ALL)
 
+
 def reporte_bajo_stock():
     limite = int(input("Ingrese el límite de bajo stock: "))
-    productos = Inventario.productos_bajo_stock(limite)
+    productos = Inventory.products_low_stock(limite)
     print(Fore.YELLOW + "\nProductos con bajo stock:" + Style.RESET_ALL)
     for producto in productos:
-        print(f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
+        print(
+            f"ID: {producto[0]}, Nombre: {producto[1]}, Descripción: {producto[2]}, Cantidad: {producto[3]}, Precio: {producto[4]}, Categoría: {producto[5]}")
+
 
 def menu_principal():
-    Inventario.inicializar_db()
+    Inventory.initialize_db()
     while True:
         print(Fore.CYAN + "\n--- Menú Principal ---" + Style.RESET_ALL)
         print("1. Registrar producto")
@@ -77,6 +87,7 @@ def menu_principal():
             break
         else:
             print(Fore.RED + "\nOpción no válida. Intente nuevamente." + Style.RESET_ALL)
+
 
 if __name__ == '__main__':
     menu_principal()
