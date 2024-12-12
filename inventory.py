@@ -2,12 +2,19 @@ import sqlite3
 
 
 class Inventory:
-    @staticmethod
-    def connect_db():
-        return sqlite3.connect('inventory.db')
+    db_name = ''
 
     @staticmethod
-    def initialize_db():
+    def connect_db():
+        return sqlite3.connect(Inventory.db_name)
+
+    @staticmethod
+    def set_db_name(db_name):
+        Inventory.db_name = db_name
+
+    @staticmethod
+    def initialize_db(db_name_env):
+        Inventory.set_db_name(db_name_env)
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         cursor.execute('''

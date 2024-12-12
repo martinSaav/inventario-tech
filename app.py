@@ -54,7 +54,7 @@ def low_stock_report():
         print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
 def menu_principal():
-    Inventory.initialize_db()
+    Inventory.initialize_db("inventory.db")
     while True:
         print(Fore.CYAN + "\n--- Main Menu ---" + Style.RESET_ALL)
         print("1. Add product")
