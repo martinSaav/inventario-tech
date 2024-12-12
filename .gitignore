@@ -1,0 +1,8 @@
+# ignorar py cache
+*.pyc
+
+# ignorar directorio de entorno virtual
+venv/
+
+# ignorar archivos de base de datos
+*.db
