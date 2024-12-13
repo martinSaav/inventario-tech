@@ -52,6 +52,8 @@ class Inventory:
 
     @staticmethod
     def update_product(product_id, attribute, new_value):
+        if not Inventory.find_product(product_id):
+            return False
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         cursor.execute(f'''
@@ -59,23 +61,23 @@ class Inventory:
             SET {attribute} = ?
             WHERE id = ?
         ''', (new_value, product_id))
-        changes = cursor.rowcount
         connection.commit()
         connection.close()
-        return changes > 0
+        return True
 
     @staticmethod
     def delete_product(product_id):
+        if not Inventory.find_product(product_id):
+            return False
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         cursor.execute('''
             DELETE FROM products
             WHERE id = ?
         ''', (product_id,))
-        changes = cursor.rowcount
         connection.commit()
         connection.close()
-        return changes > 0
+        return True
 
     @staticmethod
     def find_product(product_id):
