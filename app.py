@@ -138,6 +138,9 @@ def low_stock_report():
         return
     products = Inventory.products_low_stock(limit)
     print(Fore.YELLOW + "\nProducts with low stock:" + Style.RESET_ALL)
+    if not products:
+        print(Fore.RED + "No products with low stock!" + Style.RESET_ALL)
+        return
     for product in products:
         print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
