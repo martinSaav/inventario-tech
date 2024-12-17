@@ -1,9 +1,13 @@
 from colorama import Fore, Style
-from networkx.algorithms.triads import triad_type
-from unicodedata import category
+
 
 from inventory import Inventory
 
+def show_product_categories():
+    categories = Inventory.get_categories()
+    print(Fore.BLUE + "Product Categories:" + Style.RESET_ALL)
+    for category in categories:
+        print(f"ID: {category[0]}, Name: {category[1]}")
 
 def add_product():
     name = input("Enter product name: ")
@@ -21,10 +25,8 @@ def add_product():
         print(Fore.RED + "Invalid price. Please enter a number." + Style.RESET_ALL)
         add_product()
         return
-    categories = Inventory.get_categories()
-    print(Fore.BLUE + "Product Categories:" + Style.RESET_ALL)
-    for category in categories:
-        print(f"ID: {category[0]}, Name: {category[1]}")
+
+    show_product_categories()
 
     try:
         id_category = int(input("Enter the category ID: "))
@@ -44,10 +46,11 @@ def add_product():
 def show_products():
     products = Inventory.get_products()
     print(Fore.BLUE + "\nInventory Products:" + Style.RESET_ALL)
+    if not products:
+        print(Fore.RED + "No products yet!" + Style.RESET_ALL)
+        return
     for product in products:
-        category_id = product[5]
-        category = Inventory.get_category(category_id)[1]
-        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {category}")
+        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
 
 def update_product():
@@ -74,9 +77,52 @@ def delete_product():
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
 
 
-def find_product():
-    product_id = int(input("Enter the product ID to find: "))
-    product = Inventory.find_product_by_id(product_id)
+def find_products():
+    print(Fore.BLUE + "\nFind Products by:" + Style.RESET_ALL)
+    print("1. ID")
+    print("2. Name")
+    print("3. Category")
+
+    try:
+        option = int(input("Select an option: "))
+    except ValueError:
+        print(Fore.RED + "Invalid option. Please enter a number." + Style.RESET_ALL)
+        find_products()
+        return
+
+    product = None
+
+    if option == 1:
+        try:
+            product_id = int(input("Enter the product ID: "))
+        except ValueError:
+            print(Fore.RED + "Invalid product ID. Please enter a number." + Style.RESET_ALL)
+            find_products()
+            return
+        product = Inventory.find_product_by_id(product_id)
+
+    elif option == 2:
+        product_name = input("Enter the product name: ")
+        product = Inventory.find_product_by_name(product_name)
+
+    elif option == 3:
+        show_product_categories()
+        try:
+            category_id = int(input("Enter the category ID: "))
+        except ValueError:
+            print(Fore.RED + "Invalid category ID. Please enter a number." + Style.RESET_ALL)
+            find_products()
+            return
+
+        products = Inventory.find_products_by_category(category_id)
+        if products:
+            print(Fore.BLUE + "\nProducts in Category:" + Style.RESET_ALL)
+            for product in products:
+                print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}")
+        else:
+            print(Fore.RED + "No products found in this category!" + Style.RESET_ALL)
+        return
+
     if product:
         print(Fore.BLUE + f"\nProduct found: ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}" + Style.RESET_ALL)
     else:
@@ -103,7 +149,7 @@ def menu_principal():
         print("2. Show products")
         print("3. Update product")
         print("4. Delete product")
-        print("5. Find product")
+        print("5. Find products")
         print("6. Generate low stock report")
         print("7. Exit")
 
@@ -118,7 +164,7 @@ def menu_principal():
         elif option == '4':
             delete_product()
         elif option == '5':
-            find_product()
+            find_products()
         elif option == '6':
             low_stock_report()
         elif option == '7':

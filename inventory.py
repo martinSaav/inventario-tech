@@ -74,7 +74,7 @@ class Inventory:
 
     @staticmethod
     def update_product(product_id, attribute, new_value):
-        if not Inventory.find_product(product_id):
+        if not Inventory.find_product_by_id(product_id):
             return False
         connection = Inventory.connect_db()
         cursor = connection.cursor()
@@ -89,7 +89,7 @@ class Inventory:
 
     @staticmethod
     def delete_product(product_id):
-        if not Inventory.find_product(product_id):
+        if not Inventory.find_product_by_id(product_id):
             return False
         connection = Inventory.connect_db()
         cursor = connection.cursor()
@@ -109,6 +109,24 @@ class Inventory:
         product = cursor.fetchone()
         connection.close()
         return product
+
+    @staticmethod
+    def find_product_by_name(product_name):
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM products WHERE name = ?', (product_name,))
+        product = cursor.fetchone()
+        connection.close()
+        return product
+
+    @staticmethod
+    def find_products_by_category(category_id):
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM products WHERE id_category = ?', (category_id,))
+        products = cursor.fetchall()
+        connection.close()
+        return products
 
     @staticmethod
     def products_low_stock(limit):
