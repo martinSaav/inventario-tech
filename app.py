@@ -1,3 +1,4 @@
+from attr import attributes
 from colorama import Fore, Style
 
 
@@ -59,13 +60,60 @@ def update_product():
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
         return
 
-    attributes = Inventory.get_table_columns("products")
-    print("Available attributes to update:", ", ".join([attr["name"] for attr in attributes]))
+    columns = Inventory.get_table_columns("products")
+    attributes_names = ["name", "description", "quantity", "price", "id_category"]
+    print("Available attributes to update:")
+    print("1. Name")
+    print("2. Description")
+    print("3. Quantity")
+    print("4. Price")
+    print("5. Category")
 
-    attribute = input("Enter the attribute to update: ")
+    try:
+        attribute_number = int(input("Enter the attribute number to update: "))
+    except ValueError:
+        print(Fore.RED + "\nInvalid attribute number. Please enter a number." + Style.RESET_ALL)
+        return update_product()
+
+    if attribute_number < 1 or attribute_number > 5:
+        print(Fore.RED + "\nInvalid attribute number. Please try again." + Style.RESET_ALL)
+        return update_product()
+
+    attribute = attributes_names[attribute_number - 1]
+
+    column_type = None
+    for column in columns:
+        if column["name"] == attribute:
+            column_type = column["type"]
+            break
+
+    if attribute == "id_category":
+        show_product_categories()
+
     new_value = input("Enter the new value: ")
-    Inventory.update_product(product_id, attribute, new_value)
-    print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
+
+    if column_type == "INTEGER":
+        try:
+            new_value = int(new_value)
+        except ValueError:
+            print(Fore.RED + "\nInvalid value. Expected an integer." + Style.RESET_ALL)
+            return update_product()
+    elif column_type == "REAL":
+        try:
+            new_value = float(new_value)
+        except ValueError:
+            print(Fore.RED + "\nInvalid value. Expected a decimal number." + Style.RESET_ALL)
+            return update_product()
+
+    if attribute == "id_category" and not Inventory.category_exists(new_value):
+        print(Fore.RED + "\nCategory not found. Please enter a valid category ID." + Style.RESET_ALL)
+        return update_product()
+
+    success = Inventory.update_product(product_id, attribute, new_value)
+    if success:
+        print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
+    else:
+        print(Fore.RED + "\nFailed to update the product." + Style.RESET_ALL)
 
 
 def delete_product():
@@ -73,8 +121,7 @@ def delete_product():
         product_id = int(input("Enter the product ID to delete: "))
     except ValueError:
         print(Fore.RED + "Invalid product ID. Please enter a number." + Style.RESET_ALL)
-        delete_product()
-        return
+        return delete_product()
     if Inventory.delete_product(product_id):
         print(Fore.GREEN + "\nProduct successfully deleted!" + Style.RESET_ALL)
     else:
@@ -182,6 +229,9 @@ def main_menu():
             break
         else:
             print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
+        input("\nPress Enter to continue...")
+
+
 
 
 if __name__ == '__main__':
