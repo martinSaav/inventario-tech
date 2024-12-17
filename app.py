@@ -58,6 +58,10 @@ def update_product():
     if not Inventory.find_product_by_id(product_id):
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
         return
+
+    attributes = Inventory.get_table_columns("products")
+    print("Available attributes to update:", ", ".join([attr["name"] for attr in attributes]))
+
     attribute = input("Enter the attribute to update: ")
     new_value = input("Enter the new value: ")
     Inventory.update_product(product_id, attribute, new_value)

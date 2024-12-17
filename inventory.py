@@ -163,3 +163,12 @@ class Inventory:
         exists = cursor.fetchone() is not None
         connection.close()
         return exists
+
+    @staticmethod
+    def get_table_columns(table_name):
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute(f"PRAGMA table_info({table_name})")
+        columns = [{"name": row[1], "type": row[2]} for row in cursor.fetchall()]
+        connection.close()
+        return columns
