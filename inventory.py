@@ -24,20 +24,42 @@ class Inventory:
                 description TEXT,
                 quantity INTEGER NOT NULL,
                 price REAL NOT NULL,
-                category TEXT
+                id_category INTEGER,
+                FOREIGN KEY (id_category) REFERENCES categories(id)
             )
         ''')
+
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS categories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL UNIQUE
+            )
+        ''')
+
+        cursor.execute('''
+            INSERT OR IGNORE INTO categories (name)
+            VALUES ('Electronics')
+        ''')
+        cursor.execute('''
+            INSERT OR IGNORE INTO categories (name)
+            VALUES ('Clothing')
+        ''')
+        cursor.execute('''
+            INSERT OR IGNORE INTO categories (name)
+            VALUES ('Books')
+        ''')
+
         connection.commit()
         connection.close()
 
     @staticmethod
-    def add_product(name, description, quantity, price, category):
+    def add_product(name, description, quantity, price, id_category):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         cursor.execute('''
-            INSERT INTO products (name, description, quantity, price, category)
+            INSERT INTO products (name, description, quantity, price, id_category)
             VALUES (?, ?, ?, ?, ?)
-        ''', (name, description, quantity, price, category))
+        ''', (name, description, quantity, price, id_category))
         connection.commit()
         connection.close()
 
@@ -96,3 +118,30 @@ class Inventory:
         products = cursor.fetchall()
         connection.close()
         return products
+
+    @staticmethod
+    def get_categories():
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM categories')
+        categories = cursor.fetchall()
+        connection.close()
+        return categories
+
+    @staticmethod
+    def get_category(category_id):
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM categories WHERE id = ?', (category_id,))
+        category = cursor.fetchone()
+        connection.close()
+        return category
+
+    @staticmethod
+    def category_exists(category_id):
+        connection = Inventory.connect_db()
+        cursor = connection.cursor()
+        cursor.execute('SELECT 1 FROM categories WHERE id = ?', (category_id,))
+        exists = cursor.fetchone() is not None
+        connection.close()
+        return exists

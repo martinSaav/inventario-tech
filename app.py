@@ -1,14 +1,43 @@
 from colorama import Fore, Style
+from networkx.algorithms.triads import triad_type
+from unicodedata import category
+
 from inventory import Inventory
 
 
 def add_product():
     name = input("Enter product name: ")
     description = input("Enter product description: ")
-    quantity = int(input("Enter available quantity: "))
-    price = float(input("Enter product price: "))
-    category = input("Enter product category: ")
-    Inventory.add_product(name, description, quantity, price, category)
+    try:
+        quantity = int(input("Enter available quantity: "))
+    except ValueError:
+        print(Fore.RED + "Invalid quantity. Please enter a number." + Style.RESET_ALL)
+        add_product()
+        return
+
+    try:
+        price = float(input("Enter product price: "))
+    except ValueError:
+        print(Fore.RED + "Invalid price. Please enter a number." + Style.RESET_ALL)
+        add_product()
+        return
+    categories = Inventory.get_categories()
+    print(Fore.BLUE + "Product Categories:" + Style.RESET_ALL)
+    for category in categories:
+        print(f"ID: {category[0]}, Name: {category[1]}")
+
+    try:
+        id_category = int(input("Enter the category ID: "))
+    except ValueError:
+        print(Fore.RED + "Invalid category ID. Please enter a number." + Style.RESET_ALL)
+        add_product()
+        return
+    if not Inventory.category_exists(id_category):
+        print(Fore.RED + "Category not found. Please enter a valid category ID." + Style.RESET_ALL)
+        add_product()
+        return
+
+    Inventory.add_product(name, description, quantity, price, id_category)
     print(Fore.GREEN + "\nProduct successfully added!" + Style.RESET_ALL)
 
 
@@ -16,17 +45,20 @@ def show_products():
     products = Inventory.get_products()
     print(Fore.BLUE + "\nInventory Products:" + Style.RESET_ALL)
     for product in products:
-        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
+        category_id = product[5]
+        category = Inventory.get_category(category_id)[1]
+        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {category}")
 
 
 def update_product():
     product_id = int(input("Enter the product ID to update: "))
+    if not Inventory.find_product(product_id):
+        print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
+        return
     attribute = input("Enter the attribute to update: ")
     new_value = input("Enter the new value: ")
-    if Inventory.update_product(product_id, attribute, new_value):
-        print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
-    else:
-        print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
+    Inventory.update_product(product_id, attribute, new_value)
+    print(Fore.GREEN + "\nProduct successfully updated!" + Style.RESET_ALL)
 
 
 def delete_product():
