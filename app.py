@@ -63,6 +63,10 @@ def update_product():
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
         return
 
+    product = Inventory.find_product_by_id(product_id)
+    category = Inventory.get_category(product[5])[1]
+    print(Fore.BLUE + f"\nProduct found: ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {category}" + Style.RESET_ALL)
+
     columns = Inventory.get_table_columns("products")
     attributes_names = ["name", "description", "quantity", "price", "id_category"]
     print("Available attributes to update:")
