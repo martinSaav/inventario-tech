@@ -102,7 +102,7 @@ class Inventory:
         return True
 
     @staticmethod
-    def find_product(product_id):
+    def find_product_by_id(product_id):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM products WHERE id = ?', (product_id,))

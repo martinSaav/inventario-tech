@@ -52,7 +52,7 @@ def show_products():
 
 def update_product():
     product_id = int(input("Enter the product ID to update: "))
-    if not Inventory.find_product(product_id):
+    if not Inventory.find_product_by_id(product_id):
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
         return
     attribute = input("Enter the attribute to update: ")
@@ -62,7 +62,12 @@ def update_product():
 
 
 def delete_product():
-    product_id = int(input("Enter the product ID to delete: "))
+    try:
+        product_id = int(input("Enter the product ID to delete: "))
+    except ValueError:
+        print(Fore.RED + "Invalid product ID. Please enter a number." + Style.RESET_ALL)
+        delete_product()
+        return
     if Inventory.delete_product(product_id):
         print(Fore.GREEN + "\nProduct successfully deleted!" + Style.RESET_ALL)
     else:
@@ -71,7 +76,7 @@ def delete_product():
 
 def find_product():
     product_id = int(input("Enter the product ID to find: "))
-    product = Inventory.find_product(product_id)
+    product = Inventory.find_product_by_id(product_id)
     if product:
         print(Fore.BLUE + f"\nProduct found: ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}" + Style.RESET_ALL)
     else:
@@ -79,7 +84,12 @@ def find_product():
 
 
 def low_stock_report():
-    limit = int(input("Enter the low stock limit: "))
+    try:
+        limit = int(input("Enter the low stock limit: "))
+    except ValueError:
+        print(Fore.RED + "Invalid limit. Please enter a number." + Style.RESET_ALL)
+        low_stock_report()
+        return
     products = Inventory.products_low_stock(limit)
     print(Fore.YELLOW + "\nProducts with low stock:" + Style.RESET_ALL)
     for product in products:
