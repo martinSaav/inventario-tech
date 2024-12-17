@@ -141,17 +141,20 @@ def low_stock_report():
     for product in products:
         print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
-def menu_principal():
+def main_menu():
     Inventory.initialize_db("inventory.db")
     while True:
-        print(Fore.CYAN + "\n--- Main Menu ---" + Style.RESET_ALL)
-        print("1. Add product")
-        print("2. Show products")
-        print("3. Update product")
-        print("4. Delete product")
-        print("5. Find products")
-        print("6. Generate low stock report")
-        print("7. Exit")
+        print("+" + "-" * 50 + "+")
+        print(f"|{' Main Menu ':^50}|")
+        print("+" + "-" * 50 + "+")
+        print(f"| {'1. Add product':<48} |")
+        print(f"| {'2. Show products':<48} |")
+        print(f"| {'3. Update product':<48} |")
+        print(f"| {'4. Delete product':<48} |")
+        print(f"| {'5. Find products':<48} |")
+        print(f"| {'6. Generate low stock report':<48} |")
+        print(f"| {'7. Exit':<48} |")
+        print("+" + "-" * 50 + "+")
 
         option = input("Select an option: ")
 
@@ -175,4 +178,4 @@ def menu_principal():
 
 
 if __name__ == '__main__':
-    menu_principal()
+    main_menu()
