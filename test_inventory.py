@@ -29,20 +29,20 @@ def test_get_products(setup_database):
     assert products[0][1] == "Test Product", "First product name should match."
 
 def test_find_product(setup_database):
-    product = Inventory.find_product(1)
+    product = Inventory.find_product_by_id(1)
     assert product is not None, "Product with ID 1 should exist."
     assert product[1] == "Test Product", "Product name should match."
 
 def test_update_product(setup_database):
     success = Inventory.update_product(1, "quantity", 5)
     assert success, "Update should succeed for existing product."
-    product = Inventory.find_product(1)
+    product = Inventory.find_product_by_id(1)
     assert product[3] == 5, "Product quantity should be updated."
 
 def test_delete_product(setup_database):
     success = Inventory.delete_product(1)
     assert success, "Delete should succeed for existing product."
-    product = Inventory.find_product(1)
+    product = Inventory.find_product_by_id(1)
     assert product is None, "Product should no longer exist in the database."
 
 def test_products_low_stock(setup_database):
