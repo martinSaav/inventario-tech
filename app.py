@@ -1,4 +1,6 @@
-from attr import attributes
+import os
+import sys
+
 from colorama import Fore, Style
 
 
@@ -51,7 +53,8 @@ def show_products():
         print(Fore.RED + "No products yet!" + Style.RESET_ALL)
         return
     for product in products:
-        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
+        category = Inventory.get_category(product[5])[1]
+        print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {category}")
 
 
 def update_product():
@@ -195,7 +198,15 @@ def low_stock_report():
     for product in products:
         print(f"ID: {product[0]}, Name: {product[1]}, Description: {product[2]}, Quantity: {product[3]}, Price: {product[4]}, Category: {product[5]}")
 
-def main_menu():
+
+def clear_screen():
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Unix/Linux/Mac
+        os.system('clear')
+
+
+def main():
     Inventory.initialize_db("inventory.db")
     while True:
         print("+" + "-" * 50 + "+")
@@ -231,8 +242,16 @@ def main_menu():
             print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
         input("\nPress Enter to continue...")
 
-
+        clear_screen()
 
 
 if __name__ == '__main__':
-    main_menu()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Interrupted')
+        try:
+            sys.exit(130)
+        except SystemExit:
+            sys.exit(0)
+
