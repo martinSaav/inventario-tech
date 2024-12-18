@@ -22,8 +22,8 @@ class Inventory:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 description TEXT,
-                quantity INTEGER NOT NULL,
-                price REAL NOT NULL,
+                quantity INTEGER NOT NULL CHECK (quantity >= 0),
+                price REAL NOT NULL CHECK (price >= 0),
                 id_category INTEGER,
                 FOREIGN KEY (id_category) REFERENCES categories(id)
             )

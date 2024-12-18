@@ -1,8 +1,8 @@
 import os
 import sys
+from sqlite3 import IntegrityError
 
 from colorama import Fore, Style
-
 
 from inventory import Inventory
 
@@ -19,15 +19,19 @@ def add_product():
         quantity = int(input("Enter available quantity: "))
     except ValueError:
         print(Fore.RED + "Invalid quantity. Please enter a number." + Style.RESET_ALL)
-        add_product()
-        return
+        return add_product()
+    except IntegrityError:
+        print(Fore.RED + "Invalid quantity. Please enter a positive number greater than 0." + Style.RESET_ALL)
+        return add_product()
 
     try:
         price = float(input("Enter product price: "))
     except ValueError:
         print(Fore.RED + "Invalid price. Please enter a number." + Style.RESET_ALL)
-        add_product()
-        return
+        return add_product()
+    except IntegrityError:
+        print(Fore.RED + "Invalid price. Please enter a positive number greater than 0." + Style.RESET_ALL)
+        return add_product()
 
     show_product_categories()
 
@@ -105,11 +109,17 @@ def update_product():
         except ValueError:
             print(Fore.RED + "\nInvalid value. Expected an integer." + Style.RESET_ALL)
             return update_product()
+        if attribute == "quantity" and new_value < 0:
+            print(Fore.RED + "\nInvalid quantity. Please enter a positive number." + Style.RESET_ALL)
+            return update_product()
     elif column_type == "REAL":
         try:
             new_value = float(new_value)
         except ValueError:
             print(Fore.RED + "\nInvalid value. Expected a decimal number." + Style.RESET_ALL)
+            return update_product()
+        if attribute == "price" and new_value < 0:
+            print(Fore.RED + "\nInvalid price. Please enter a positive number." + Style.RESET_ALL)
             return update_product()
 
     if attribute == "id_category" and not Inventory.category_exists(new_value):
