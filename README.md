@@ -52,7 +52,7 @@ To install the inventory manager, you can clone this repository and run the foll
     ```
 4. Activate the virtual environment:
     ```bash
-    source .\.venv\Scripts\activate 
+    source ./.venv/Scripts/activate 
     ```
 5. if it doesn't work then try this command
 

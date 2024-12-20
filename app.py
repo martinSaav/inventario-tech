@@ -26,7 +26,7 @@ def change_language():
     global current_language
     print("1. English")
     print("2. Español")
-    option = input("Select a language: ")
+    option = input(_('select_language'))
     if option == '1':
         current_language = "en"
     elif option == '2':
@@ -35,7 +35,7 @@ def change_language():
         print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
         return
     load_translations(current_language)
-    print(Fore.GREEN + "Language changed successfully!" + Style.RESET_ALL)
+    print(Fore.GREEN + _("language_changed_successfully") + Style.RESET_ALL)
 
 def show_product_categories():
     categories = Inventory.get_categories()
@@ -268,7 +268,7 @@ def main():
         print(f"| 4. {_('delete_product'):<45} |")
         print(f"| 5. {_('find_products'):<45} |")
         print(f"| 6. {_('low_stock_report'):<45} |")
-        print(f"| 7. {'Change language':<45} |")  
+        print(f"| 7. {_('change_language'):<45} |")  
         print(f"| 8. {_('exit'):<45} |")
         print("+" + "-" * 50 + "+")
 
@@ -292,7 +292,7 @@ def main():
             break
         else:
             print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
-        input("\nPress Enter to continue...")
+        input("\n" + _('press_enter') + "\n")
         clear_screen()
 
 
