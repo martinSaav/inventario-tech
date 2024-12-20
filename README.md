@@ -50,6 +50,11 @@ To install the inventory manager, you can clone this repository and run the foll
     ```bash
     source .\.venv\Scripts\activate 
     ```
+5. if it doesn't work then try this command
+
+    ```bash
+    source ./.venv/bin/activate 
+    ```
    
 5. Install the required packages:
     ```bash
