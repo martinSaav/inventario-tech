@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from sqlite3 import IntegrityError
@@ -5,6 +6,36 @@ from sqlite3 import IntegrityError
 from colorama import Fore, Style
 
 from inventory import Inventory
+
+current_language = "en"
+translations = {}
+
+def load_translations(language):
+    global translations
+    try:
+        with open(f"translations/{language}.json", "r", encoding="utf-8") as file:
+            translations = json.load(file)
+    except FileNotFoundError:
+        print(f"Error: Translation file for '{language}' not found.")
+        sys.exit(1)
+
+def _(key):
+    return translations.get(key, key)
+
+def change_language():
+    global current_language
+    print("1. English")
+    print("2. Español")
+    option = input("Select a language: ")
+    if option == '1':
+        current_language = "en"
+    elif option == '2':
+        current_language = "es"
+    else:
+        print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
+        return
+    load_translations(current_language)
+    print(Fore.GREEN + "Language changed successfully!" + Style.RESET_ALL)
 
 def show_product_categories():
     categories = Inventory.get_categories()
@@ -226,21 +257,22 @@ def clear_screen():
 
 def main():
     Inventory.initialize_db("inventory.db")
+    load_translations(current_language)  # Cargar traducciones iniciales
     while True:
         print("+" + "-" * 50 + "+")
-        print(f"|{' Main Menu ':^50}|")
+        print(f"|{_('main_menu'):^50}|")
         print("+" + "-" * 50 + "+")
-        print(f"| {'1. Add product':<48} |")
-        print(f"| {'2. Show products':<48} |")
-        print(f"| {'3. Update product':<48} |")
-        print(f"| {'4. Delete product':<48} |")
-        print(f"| {'5. Find products':<48} |")
-        print(f"| {'6. Generate low stock report':<48} |")
-        print(f"| {'7. Exit':<48} |")
+        print(f"| 1. {_('add_product'):<45} |")
+        print(f"| 2. {_('show_products'):<45} |")
+        print(f"| 3. {_('update_product'):<45} |")
+        print(f"| 4. {_('delete_product'):<45} |")
+        print(f"| 5. {_('find_products'):<45} |")
+        print(f"| 6. {_('low_stock_report'):<45} |")
+        print(f"| 7. {'Change language':<45} |")  
+        print(f"| 8. {_('exit'):<45} |")
         print("+" + "-" * 50 + "+")
 
-        option = input("Select an option: ")
-
+        option = input(_("select_option"))
         if option == '1':
             add_product()
         elif option == '2':
@@ -254,13 +286,15 @@ def main():
         elif option == '6':
             low_stock_report()
         elif option == '7':
-            print(Fore.GREEN + "\nThank you for using the application. Goodbye!" + Style.RESET_ALL)
+            change_language()
+        elif option == '8':
+            print(Fore.GREEN + _("thank_you") + Style.RESET_ALL)
             break
         else:
-            print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
+            print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
         input("\nPress Enter to continue...")
-
         clear_screen()
+
 
 
 if __name__ == '__main__':

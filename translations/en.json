@@ -1,0 +1,13 @@
+{
+    "main_menu": "Main Menu",
+    "add_product": "Add product",
+    "show_products": "Show products",
+    "update_product": "Update product",
+    "delete_product": "Delete product",
+    "find_products": "Find products",
+    "low_stock_report": "Generate low stock report",
+    "exit": "Exit",
+    "select_option": "Select an option: ",
+    "invalid_option": "Invalid option. Please try again.",
+    "thank_you": "Thank you for using the application. Goodbye!"
+}

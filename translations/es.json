@@ -1,0 +1,13 @@
+{
+    "main_menu": "Menú Principal",
+    "add_product": "Agregar producto",
+    "show_products": "Mostrar productos",
+    "update_product": "Actualizar producto",
+    "delete_product": "Eliminar producto",
+    "find_products": "Buscar productos",
+    "low_stock_report": "Generar informe de bajo stock",
+    "exit": "Salir",
+    "select_option": "Seleccione una opción: ",
+    "invalid_option": "Opción inválida. Intente de nuevo.",
+    "thank_you": "Gracias por usar la aplicación. ¡Adiós!"
+}
