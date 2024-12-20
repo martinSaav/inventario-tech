@@ -6,6 +6,7 @@ This repository contains a Python-based inventory management system.
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Contributors](#contributors)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -14,6 +15,9 @@ This repository contains a Python-based inventory management system.
 ## Introduction
 
 This project aims to provide a simple and efficient way to manage inventories. It includes basic functionality to add, update, and remove items from the inventory.
+
+## Contributors
+- [Martín Alejandro Estrada Saavedra](https://github.com/martinSaav)
 
 ## Features
 
