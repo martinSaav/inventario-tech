@@ -6,7 +6,9 @@ class Inventory:
 
     @staticmethod
     def connect_db():
-        return sqlite3.connect(Inventory.db_name)
+        connection = sqlite3.connect(Inventory.db_name)
+        connection.execute("PRAGMA foreign_keys = ON")  # Habilitar claves foráneas
+        return connection
 
     @staticmethod
     def set_db_name(db_name):
@@ -23,7 +25,7 @@ class Inventory:
                 name TEXT NOT NULL,
                 description TEXT,
                 quantity INTEGER NOT NULL CHECK (quantity >= 0),
-                price REAL NOT NULL CHECK (price >= 0),
+                price REAL NOT NULL CHECK (price > 0),
                 id_category INTEGER,
                 FOREIGN KEY (id_category) REFERENCES categories(id)
             )
@@ -54,6 +56,10 @@ class Inventory:
 
     @staticmethod
     def add_product(name, description, quantity, price, id_category):
+        if not isinstance(quantity, int):
+            raise sqlite3.IntegrityError("Quantity must be a positive integer.")
+        if not isinstance(price, (int, float)):
+            raise sqlite3.IntegrityError("Price must be a positive number.")
         connection = Inventory.connect_db()
         cursor = connection.cursor()
         try:
@@ -80,13 +86,24 @@ class Inventory:
     def update_product(product_id, attribute, new_value):
         if not Inventory.find_product_by_id(product_id):
             return False
+        if attribute == 'quantity' and not isinstance(new_value, int):
+            raise sqlite3.IntegrityError("Quantity must be a positive integer.")
+        if attribute == 'price' and not isinstance(new_value, (int, float)):
+            raise sqlite3.IntegrityError("Price must be a positive number.")
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute(f'''
-            UPDATE products
-            SET {attribute} = ?
-            WHERE id = ?
-        ''', (new_value, product_id))
+        try:
+            cursor.execute(f'''
+                UPDATE products
+                SET {attribute} = ?
+                WHERE id = ?
+            ''', (new_value, product_id))
+        except sqlite3.IntegrityError:
+            connection.close()
+            raise sqlite3.IntegrityError
+        except sqlite3.OperationalError:
+            connection.close()
+            raise sqlite3.OperationalError
         connection.commit()
         connection.close()
         return True

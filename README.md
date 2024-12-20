@@ -2,7 +2,7 @@
 
 # Inventory management
 
-This repository contains a Python-based inventory management system.
+This [repository](https://github.com/martinSaav/inventory-management) contains a Python-based inventory management system.
 
 ## Table of Contents
 - [Introduction](#introduction)

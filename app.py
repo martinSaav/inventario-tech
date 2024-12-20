@@ -62,7 +62,11 @@ def show_products():
 
 
 def update_product():
-    product_id = int(input("Enter the product ID to update: "))
+    try:
+        product_id = int(input("Enter the product ID to update: "))
+    except ValueError:
+        print(Fore.RED + "\nInvalid product ID. Please enter a number." + Style.RESET_ALL)
+        return update_product()
     if not Inventory.find_product_by_id(product_id):
         print(Fore.RED + "\nProduct not found!" + Style.RESET_ALL)
         return
