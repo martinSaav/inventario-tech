@@ -56,10 +56,14 @@ class Inventory:
     def add_product(name, description, quantity, price, id_category):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('''
-            INSERT INTO products (name, description, quantity, price, id_category)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (name, description, quantity, price, id_category))
+        try:
+            cursor.execute('''
+                INSERT INTO products (name, description, quantity, price, id_category)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (name, description, quantity, price, id_category))
+        except sqlite3.IntegrityError:
+            connection.close()
+            raise sqlite3.IntegrityError
         connection.commit()
         connection.close()
 
