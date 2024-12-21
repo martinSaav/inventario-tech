@@ -27,6 +27,13 @@ This project aims to provide a simple and efficient way to manage inventories. I
 - List all items in the inventory
 - Search for items in the inventory
 - List all items whose quantity is below a certain threshold
+- Multi Language
+- - English
+- - Spanish
+- - Portuguese
+- - Chinese
+- - Russian
+- - German
 
 ## Installation
 
