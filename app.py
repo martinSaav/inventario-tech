@@ -62,19 +62,19 @@ def add_product():
         quantity = int(input(_("enter_product_quantity")))
     except ValueError:
         print(Fore.RED + _("invalid_quantity") + Style.RESET_ALL)
-        return add_product()
+        return 
     if quantity < 0:
         print(Fore.RED + _("invalid_quantity") + Style.RESET_ALL)
-        return add_product()
+        return 
 
     try:
         price = float(input(_("enter_product_price")))
     except ValueError:
         print(Fore.RED + _("invalid_price") + Style.RESET_ALL)
-        return add_product()
+        return 
     if price <= 0:
         print(Fore.RED + _("invalid_price") + Style.RESET_ALL)
-        return add_product()
+        return 
 
     show_product_categories()
 
@@ -82,10 +82,10 @@ def add_product():
         id_category = int(input(_("enter_category_id")))
     except ValueError:
         print(Fore.RED + _("invalid_category_id") + Style.RESET_ALL)
-        return add_product()
+        return 
     if not Inventory.category_exists(id_category):
         print(Fore.RED + _("category_not_found") + Style.RESET_ALL)
-        return add_product()
+        return 
 
     Inventory.add_product(name, description, quantity, price, id_category)
     print(Fore.GREEN + "\n" + _("product_added_successfully") + Style.RESET_ALL)
@@ -110,7 +110,7 @@ def update_product():
         product_id = int(input(_("enter_product_id")))
     except ValueError:
         print(Fore.RED + "\n" + _("invalid_product_id") + Style.RESET_ALL)
-        return update_product()
+        return
     if not Inventory.find_product_by_id(product_id):
         print(Fore.RED + "\n" + _("product_not_found") + Style.RESET_ALL)
         return
@@ -132,11 +132,11 @@ def update_product():
         attribute_number = int(input(_("enter_attribute_to_update")))
     except ValueError:
         print(Fore.RED + "\n" + _("invalid_attribute") + Style.RESET_ALL)
-        return update_product()
+        return
 
     if attribute_number < 1 or attribute_number > 5:
         print(Fore.RED + "\n" + _("invalid_attribute") + Style.RESET_ALL)
-        return update_product()
+        return
 
     attribute = attributes_names[attribute_number - 1]
 
@@ -156,23 +156,23 @@ def update_product():
             new_value = int(new_value)
         except ValueError:
             print(Fore.RED + "\n" + _("invalid_value_integer") + Style.RESET_ALL)
-            return update_product()
+            return
         if attribute == "quantity" and new_value < 0:
             print(Fore.RED + "\n " + _("invalid_quantity") + Style.RESET_ALL)
-            return update_product()
+            return
     elif column_type == "REAL":
         try:
             new_value = float(new_value)
         except ValueError:
             print(Fore.RED + "\n" + _("invalid_value_float") + Style.RESET_ALL)
-            return update_product()
+            return
         if attribute == "price" and new_value <= 0:
             print(Fore.RED + "\n" + _("invalid_price") + Style.RESET_ALL)
-            return update_product()
+            return
 
     if attribute == "id_category" and not Inventory.category_exists(new_value):
         print(Fore.RED + "\n" + _("category_not_found") + Style.RESET_ALL)
-        return update_product()
+        return
 
     success = Inventory.update_product(product_id, attribute, new_value)
     if success:
@@ -186,7 +186,7 @@ def delete_product():
         product_id = int(input(_("enter_product_id")))
     except ValueError:
         print(Fore.RED + "\n" + _("invalid_product_id") + Style.RESET_ALL)
-        return delete_product()
+        return
     
     product = Inventory.find_product_by_id(product_id)
     if not product:
@@ -216,7 +216,6 @@ def find_products():
         option = int(input(_("select_option")))
     except ValueError:
         print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
-        find_products()
         return
 
     product = None
@@ -226,7 +225,7 @@ def find_products():
             product_id = int(input(_("enter_product_id")))
         except ValueError:
             print(Fore.RED + _("invalid_product_id") + Style.RESET_ALL)
-            return find_products()
+            return
         product = Inventory.find_product_by_id(product_id)
 
     elif option == 2:
@@ -239,7 +238,7 @@ def find_products():
             category_id = int(input(_("enter_category_id")))
         except ValueError:
             print(Fore.RED + _("invalid_category_id") + Style.RESET_ALL)
-            return find_products()
+            return
 
         products = Inventory.find_products_by_category(category_id)
         if products:
@@ -261,7 +260,6 @@ def low_stock_report():
         limit = int(input(_("enter_limit")))
     except ValueError:
         print(Fore.RED + _("invalid_limit") + Style.RESET_ALL)
-        low_stock_report()
         return
     products = Inventory.products_low_stock(limit)
     print(Fore.YELLOW + "\n" + _("low_stock_report_generated") + Style.RESET_ALL)
