@@ -116,7 +116,7 @@ def update_product():
         return
 
     product = Inventory.find_product_by_id(product_id)
-    print(Fore.BLUE + f"\nProduct found:" + Style.RESET_ALL)
+    print(Fore.BLUE + f"\n" + _("product_found") + Style.RESET_ALL)
     show_product(product)
 
     columns = Inventory.get_table_columns("products")
@@ -187,6 +187,19 @@ def delete_product():
     except ValueError:
         print(Fore.RED + "\n" + _("invalid_product_id") + Style.RESET_ALL)
         return delete_product()
+    
+    product = Inventory.find_product_by_id(product_id)
+    if not product:
+        print(Fore.RED + "\n" + _("product_not_found") + Style.RESET_ALL)
+        return
+    
+    print(Fore.BLUE + f"\n" + _("product_found") + Style.RESET_ALL)
+    show_product(product)
+
+    confirmation = input(_("delete_confirmation"))
+    if confirmation.lower() != "y":
+        return
+
     if Inventory.delete_product(product_id):
         print(Fore.GREEN + "\n" + _("product_deleted_successfully") + Style.RESET_ALL)
     else:
@@ -237,7 +250,7 @@ def find_products():
         return
 
     if product:
-        print(Fore.BLUE + f"\nProduct found: " + Style.RESET_ALL)
+        print(Fore.BLUE + f"\n" + _("product_found") + Style.RESET_ALL)
         show_product(product)
     else:
         print(Fore.RED + "\n" + _("product_not_found") + Style.RESET_ALL)
