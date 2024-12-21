@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import sys
@@ -8,6 +9,7 @@ from inventory import Inventory
 
 current_language = "en"
 translations = {}
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 def load_config():
     global current_language
