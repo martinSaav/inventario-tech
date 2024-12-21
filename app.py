@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-from sqlite3 import IntegrityError
 
 from colorama import Fore, Style
 
@@ -9,6 +8,20 @@ from inventory import Inventory
 
 current_language = "en"
 translations = {}
+
+def load_config():
+    global current_language
+    try:
+        with open("config.json", "r", encoding="utf-8") as file:
+            config = json.load(file)
+            current_language = config.get("language", "en")  # Default to "en" if not found
+    except FileNotFoundError:
+        current_language = "en"  # Default to English if the file doesn't exist
+
+def save_config():
+    config = {"language": current_language}
+    with open("config.json", "w", encoding="utf-8") as file:
+        json.dump(config, file, indent=4)
 
 def load_translations(language):
     global translations
@@ -34,6 +47,7 @@ def change_language():
     else:
         print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
         return
+    save_config() 
     load_translations(current_language)
     print(Fore.GREEN + _("language_changed_successfully") + Style.RESET_ALL)
 
@@ -277,8 +291,9 @@ def clear_screen():
 
 
 def main():
+    load_config()  # Load the configuration file
+    load_translations(current_language)   # Load the translations for the current language
     Inventory.initialize_db("inventory.db")
-    load_translations(current_language)  # Cargar traducciones iniciales
     while True:
         print("+" + "-" * 50 + "+")
         print(f"|{_('main_menu'):^50}|")
