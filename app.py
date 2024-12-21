@@ -37,13 +37,26 @@ def _(key):
 
 def change_language():
     global current_language
-    print("1. English")
-    print("2. Español")
+    print("1. " + _("english"))
+    print("2. " + _("spanish"))
+    print("3. " + _("portuguese"))
+    print("4. " + _("german"))
+    print("5. " + _("chinese"))
+    print("6. " + _("russian"))
+
     option = input(_('select_language'))
     if option == '1':
         current_language = "en"
     elif option == '2':
         current_language = "es"
+    elif option == '3':
+        current_language = "pt"
+    elif option == '4':
+        current_language = "de"
+    elif option == '5':
+        current_language = "zh"
+    elif option == '6':
+        current_language = "ru"
     else:
         print(Fore.RED + _("invalid_option") + Style.RESET_ALL)
         return
@@ -52,16 +65,16 @@ def change_language():
     print(Fore.GREEN + _("language_changed_successfully") + Style.RESET_ALL)
 
 def show_products_table_header():
-    print("+------+----------------------+----------------------+----------+-------------+-------------------+")
-    print(f"| {'ID':^4} | {_('name'):^20} | {_('description'):^20} | {_('quantity'):^8} | {_('price'):^11} | {_('category'):^17} |")
-    print("+------+----------------------+----------------------+----------+-------------+-------------------+")
+    print("+------+----------------------+----------------------+------------------+-------------+-------------------+")
+    print(f"| {'ID':^4} | {_('name'):^20} | {_('description'):^20} | {_('quantity'):^16} | {_('price'):^11} | {_('category'):^17} |")
+    print("+------+----------------------+----------------------+------------------+-------------+-------------------+")
 
 def product_to_table_row(producto):
     category = _(producto[5]) if producto[5] in translations else producto[5]
-    return f"| {producto[0]:^4} | {producto[1][:20]:^20} | {producto[2][:20]:^20} | {producto[3]:^8} | ${producto[4]:^10.2f} | {category[:17]:^17} |"
+    return f"| {producto[0]:^4} | {producto[1][:20]:^20} | {producto[2][:20]:^20} | {producto[3]:^16} | ${producto[4]:^10.2f} | {category[:17]:^17} |"
 
 def end_products_table():
-    print("+------+----------------------+----------------------+----------+-------------+-------------------+")
+    print("+------+----------------------+----------------------+------------------+-------------+-------------------+")
 
 def show_product_categories():
     categories = Inventory.get_categories()
