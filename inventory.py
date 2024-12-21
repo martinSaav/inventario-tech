@@ -77,10 +77,21 @@ class Inventory:
     def get_products():
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM products')
+        cursor.execute('''
+            SELECT 
+                products.id, 
+                products.name, 
+                products.description, 
+                products.quantity, 
+                products.price, 
+                categories.name AS category_name
+            FROM products
+            LEFT JOIN categories ON products.id_category = categories.id
+        ''')
         products = cursor.fetchall()
         connection.close()
         return products
+
 
     @staticmethod
     def update_product(product_id, attribute, new_value):
@@ -126,7 +137,18 @@ class Inventory:
     def find_product_by_id(product_id):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM products WHERE id = ?', (product_id,))
+        cursor.execute('''
+            SELECT 
+                products.id, 
+                products.name, 
+                products.description, 
+                products.quantity, 
+                products.price, 
+                categories.name AS category_name
+            FROM products
+            LEFT JOIN categories ON products.id_category = categories.id
+            WHERE products.id = ?
+        ''', (product_id,))
         product = cursor.fetchone()
         connection.close()
         return product
@@ -135,7 +157,18 @@ class Inventory:
     def find_product_by_name(product_name):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM products WHERE name = ?', (product_name,))
+        cursor.execute('''
+            SELECT
+                products.id,
+                products.name,
+                products.description,
+                products.quantity,
+                products.price,
+                categories.name AS category_name
+            FROM products
+            LEFT JOIN categories ON products.id_category = categories.id
+            WHERE products.name = ?
+        ''', (product_name,))
         product = cursor.fetchone()
         connection.close()
         return product
@@ -144,7 +177,18 @@ class Inventory:
     def find_products_by_category(category_id):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM products WHERE id_category = ?', (category_id,))
+        cursor.execute('''
+            SELECT
+                products.id,
+                products.name,
+                products.description,
+                products.quantity,
+                products.price,
+                categories.name AS category_name
+            FROM products
+            LEFT JOIN categories ON products.id_category = categories.id
+            WHERE categories.id = ?
+        ''', (category_id,))
         products = cursor.fetchall()
         connection.close()
         return products
@@ -153,11 +197,22 @@ class Inventory:
     def products_low_stock(limit):
         connection = Inventory.connect_db()
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM products WHERE quantity <= ?', (limit,))
+        cursor.execute('''
+            SELECT
+                products.id,
+                products.name,
+                products.description,
+                products.quantity,
+                products.price,
+                categories.name AS category_name
+            FROM products
+            LEFT JOIN categories ON products.id_category = categories.id
+            WHERE products.quantity < ?
+        ''', (limit,))
         products = cursor.fetchall()
         connection.close()
         return products
-
+    
     @staticmethod
     def get_categories():
         connection = Inventory.connect_db()
